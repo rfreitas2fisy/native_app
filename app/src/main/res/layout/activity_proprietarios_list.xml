@@ -77,7 +77,7 @@ tools:context=".List.ProprietariosList">
     android:id="@+id/gridView"
     android:layout_alignParentLeft="true"
     android:layout_alignParentStart="true"
-    android:numColumns="3"
+    android:numColumns="2"
     android:choiceMode="singleChoice"
     android:layout_below="@+id/btn_cadastrar" />
 

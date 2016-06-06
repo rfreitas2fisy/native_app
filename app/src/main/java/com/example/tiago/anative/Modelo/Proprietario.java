@@ -7,6 +7,11 @@ package com.example.tiago.anative.Modelo;
  *
  * @author Tiago
  */
+
+/**
+ *
+ * @author Tiago
+ */
 public class Proprietario {
 
     public void setId(int id) {
@@ -49,7 +54,23 @@ public class Proprietario {
         this.cidade = cidade;
     }
     int id;
-    String nome, identificacao, enderecoRua;
+    String nome, identificacao, enderecoRua, latitude, longitude;
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
     Cidade cidade;
-    
+
 }

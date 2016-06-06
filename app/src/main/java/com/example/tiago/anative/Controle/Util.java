@@ -1,5 +1,8 @@
 package com.example.tiago.anative.Controle;
 
+import android.content.Context;
+import android.widget.Toast;
+
 /**
  * Created by Tiago on 29/05/2016.
  */
@@ -21,5 +24,15 @@ public class Util {
             }
         }
         return n.toString();
+    }
+
+    public  static void  exibeMensagem(String mensagem , Context c)
+    {
+        Context contexto = c;
+        String texto = mensagem;
+        int duracao = Toast.LENGTH_SHORT;
+
+        Toast toast = Toast.makeText(contexto, texto,duracao);
+        toast.show();
     }
 }
