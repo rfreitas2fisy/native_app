@@ -65,11 +65,10 @@
         android:allowUndo="false"
         android:clickable="false"
         android:longClickable="false"
-        android:layout_marginTop="23dp"
+        android:onClick="startArvoresForm"
         android:layout_below="@+id/textView9"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20dp"
-        android:onClick="startArvoresForm" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <GridView
         android:layout_width="wrap_content"
@@ -80,5 +79,18 @@
         android:numColumns="2"
         android:choiceMode="singleChoice"
         android:layout_below="@+id/btn_cadastrar" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Maps"
+        android:id="@+id/bt_map"
+        android:layout_below="@+id/textView9"
+        android:layout_alignRight="@+id/scrollView"
+        android:layout_alignEnd="@+id/scrollView"
+        android:layout_toRightOf="@+id/textView9"
+        android:layout_toEndOf="@+id/textView9"
+        android:background="#9EC934"
+        android:textColor="#ffffff" />
 
 </RelativeLayout>

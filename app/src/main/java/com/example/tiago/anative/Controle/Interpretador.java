@@ -13,7 +13,8 @@ import java.util.ArrayList;
  */
 public class Interpretador {
 
-private String caracterDivisor = "@#"; // caracter que faz a divisao dos campos retornados pelo servidor web
+    private String caracterDivisor = "@#"; // caracter que faz a divisao dos campos retornados pelo servidor web
+
     //recebe o retorno do servidor e retorna um ArrayList com todas arvores
     public ArrayList<Arvore> LerArvoresWeb(String retornoWeb) {
         // no servidor web vem cada arvore vem assim -->
@@ -36,8 +37,9 @@ private String caracterDivisor = "@#"; // caracter que faz a divisao dos campos 
         v.setId(Integer.parseInt(arvores[1]));
         ControleEspecie ce = new ControleEspecie();
 
-        Especie p = ce.obterEspecie(Integer.parseInt(arvores[2]));
-
+        Especie p = new Especie();
+        p.setId(Integer.parseInt(arvores[2]));
+        p.setNome(arvores[10]);
         v.setEspecie(p);
         v.setIdade(Integer.parseInt(arvores[3]));
         v.setLatitude(arvores[4]);
@@ -46,8 +48,8 @@ private String caracterDivisor = "@#"; // caracter que faz a divisao dos campos 
         Proprietario prop = new Proprietario();
 
         ControleProprietario cp = new ControleProprietario();
-        prop = cp.obterProprietario(Integer.parseInt(arvores[7]));
-
+        prop.setId(Integer.parseInt(arvores[7]));
+        prop.setNome(arvores[9]);
         v.setPropietario(prop);
         v.setStatus(arvores[8]);
 
