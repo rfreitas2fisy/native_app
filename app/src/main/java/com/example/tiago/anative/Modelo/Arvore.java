@@ -13,7 +13,9 @@ public class Arvore {
 
     int id, idade;
 
-
+public String getGoogleMapsData(){
+    return  "ID:" +this.getId()+"Especie:"+this.getEspecie().getNome();
+}
 
     public String getStatus() {
         return status;

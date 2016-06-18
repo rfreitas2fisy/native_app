@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-   ArrayList<String> dadosMapa;
+    ArrayList<String> dadosMapa = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,9 +33,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Bundle params = intent.getExtras();
 
         if (params != null) {
-            Util.exibeMensagem("Parans ok" , getApplicationContext());
-       dadosMapa = params.getStringArrayList("dados");
+            //Util.exibeMensagem("Parans ok", getApplicationContext());
+            dadosMapa = params.getStringArrayList("dados");
         }
+        else dadosMapa = new ArrayList<String>();
     }
 
 
@@ -50,23 +51,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-            mMap = googleMap;
+        mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        for (int i=0; i<dadosMapa.size() -2; i=i+3 )
-        {
-            double latitude = Double.parseDouble(dadosMapa.get(i));
-            double longitude = Double.parseDouble(dadosMapa.get(i+1));
-            String obs = (dadosMapa.get(i+2));
-            LatLng pontomapa = new LatLng(latitude, longitude);
+        if (dadosMapa != null) {
+            for (int i = 0; i < dadosMapa.size() - 2; i = i + 3) {
+                double latitude = Double.parseDouble(dadosMapa.get(i));
+                double longitude = Double.parseDouble(dadosMapa.get(i + 1));
+                String obs = (dadosMapa.get(i + 2));
+                LatLng pontomapa = new LatLng(latitude, longitude);
 
 
-            mMap.addMarker(new MarkerOptions().position(pontomapa).title(obs));
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(pontomapa));
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pontomapa, 15));
+                mMap.addMarker(new MarkerOptions().position(pontomapa).title(obs));
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(pontomapa));
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pontomapa, 15));
 
 
+            }
         }
-
     }
 }

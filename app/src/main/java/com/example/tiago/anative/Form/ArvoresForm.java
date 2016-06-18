@@ -52,6 +52,7 @@ public class ArvoresForm extends AppCompatActivity implements LocationListener {
     Button verMapa = null;
     LocationManager lm = null; // usado para pegar posição gps
     boolean atualizouLoc = false; //usado para vefificar se a posição gps foi atualizad
+    Arvore v=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,8 +98,16 @@ public class ArvoresForm extends AppCompatActivity implements LocationListener {
 
                     parametros.add(0, latitude.getText().toString());
                     parametros.add(1, longitude.getText().toString());
-                    parametros.add(2, idade.getText().toString());
-                params.putStringArrayList("dados",parametros);
+                try {
+                    ControleArvore ca = new ControleArvore();
+                    Arvore a = ca.consultarArvore(Integer.parseInt(id.getText().toString()));
+                    parametros.add(a.getGoogleMapsData());
+
+                } catch (Exception ex) {
+                    parametros.add(2, "Não foi possivel consultar o proprietario");
+
+                }
+                    params.putStringArrayList("dados",parametros);
 
 
                 secondActivity.putExtras(params);
@@ -119,7 +128,7 @@ public class ArvoresForm extends AppCompatActivity implements LocationListener {
                 int idarvore = params.getInt("id");
                 //System.out.println("o parametro que recebi foi"+idarvore);
                 ControleArvore ca = new ControleArvore();
-                Arvore v = ca.consultarArvore(idarvore);
+                 v = ca.consultarArvore(idarvore);
                 id.setText(""+v.getId());
                 idade.setText(""+v.getIdade());
                 longitude.setText(""+v.getLongitude());

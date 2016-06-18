@@ -41,10 +41,9 @@ public class ArvoresList extends AppCompatActivity {
                 ArrayList<Arvore> arvores = ca.obterTodasArvores();
                 ArrayList<String> parametros = new ArrayList<String>(); //pos 0 = lat pos1 = long pos2 = desc arv
                 for (int i = 0; i < arvores.size(); i++) {
-                            parametros.add(arvores.get(i).getLatitude());
-                            parametros.add(arvores.get(i).getLongitude());
-                            parametros.add("" + arvores.get(i).getIdade());
-
+                    parametros.add(arvores.get(i).getLatitude());
+                    parametros.add(arvores.get(i).getLongitude());
+                    parametros.add(arvores.get(i).getGoogleMapsData());
 
 
                 }
