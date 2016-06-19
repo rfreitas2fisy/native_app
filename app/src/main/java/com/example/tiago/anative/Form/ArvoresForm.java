@@ -9,6 +9,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +24,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.example.tiago.anative.CameraActivity;
 import com.example.tiago.anative.Controle.ControleArvore;
 import com.example.tiago.anative.Controle.ControleEspecie;
 import com.example.tiago.anative.Controle.ControleProprietario;
@@ -54,6 +56,8 @@ public class ArvoresForm extends AppCompatActivity implements LocationListener {
     Button salvar = null;
     Button btGps = null;
     Button verMapa = null;
+    Button btFoto = null;
+    Button abrirMaps = null;// usado para abrir o google maps com destino no ponto
     LocationManager lm = null; // usado para pegar posição gps
     boolean atualizouLoc = false; //usado para vefificar se a posição gps foi atualizad
     Arvore v = null;
@@ -79,7 +83,7 @@ ArrayList<Especie> arrayEspecies = ce.obterTodasEspecies();
         String[] listaItens = new String[arrayEspecies.size()];
         for (int i=0; i< arrayEspecies.size(); i++)
         {
-         listaItens[i] =  "Id: "+arrayEspecies.get(i).getId()+" - "+ arrayEspecies.get(i).getNome();
+         listaItens[i] =  "Id- "+arrayEspecies.get(i).getId()+" - "+ arrayEspecies.get(i).getNome();
         }
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.item, listaItens);
         especie.setAdapter(adapter);
@@ -109,6 +113,21 @@ ArrayList<Especie> arrayEspecies = ce.obterTodasEspecies();
             @Override
             public void onClick(View v) {
                 attLocalizacao();
+            }
+        });
+        abrirMaps= (Button) findViewById(R.id.bt_me_leve);
+        abrirMaps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                abrirMaps();
+            }
+        });
+        btFoto = (Button) findViewById(R.id.bt_foto);
+        btFoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ArvoresForm.this, CameraActivity.class);
+                startActivity(intent);
             }
         });
         ativo = (CheckBox) findViewById(R.id.cb_ativo);
@@ -166,7 +185,7 @@ ArrayList<Especie> arrayEspecies = ce.obterTodasEspecies();
             ativo.setChecked(true);
             if (v.getStatus().equalsIgnoreCase("Ativo")) {
                 System.out.println("setei no ativo");
-                ativo.setSelected(true);
+                ativo.setChecked(true);
             } else {
                 System.out.println("setei como inativo");
                 ativo.setSelected(false);
@@ -174,6 +193,27 @@ ArrayList<Especie> arrayEspecies = ce.obterTodasEspecies();
 
 
             //setContentView(textView);
+        }
+
+    }
+
+    private void abrirMaps() {
+        // Create a Uri from an intent string. Use the result to create an Intent.
+//Util.exibeMensagem("Abrindo",getApplicationContext());
+  //                      Uri gmmIntentUri = Uri.parse("google.streetview:cbll="+latitude.getText().toString()+","+longitude.getText().toString());
+
+// Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
+    //    Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+// Make the Intent explicit by setting the Google Maps package
+      //  mapIntent.setPackage("com.google.android.apps.maps");
+
+// Attempt to start an activity that can handle the Intent
+        //startActivity(mapIntent);
+        Uri gmmIntentUri = Uri.parse("geo:"+latitude.getText().toString()+","+longitude.getText().toString());
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        if (mapIntent.resolveActivity(getPackageManager()) != null) {
+            startActivity(mapIntent);
         }
 
     }
@@ -217,7 +257,7 @@ ArrayList<Especie> arrayEspecies = ce.obterTodasEspecies();
         a.setId(Integer.parseInt(id.getText().toString()));
         a.setEnderecoGeoCode(geocode.getText().toString());
         Especie e = new Especie();
-        String ide = especie.getText().toString().split("-")[1];
+        String ide = especie.getText().toString().split("-")[1].trim();
         e.setId(Integer.parseInt(ide));
         a.setEspecie(e);
 
@@ -225,7 +265,7 @@ ArrayList<Especie> arrayEspecies = ce.obterTodasEspecies();
         a.setLatitude(latitude.getText().toString());
         a.setLongitude(longitude.getText().toString());
         Proprietario p = new Proprietario();
-        String idp = proprietario.getText().toString().split("-")[1];
+        String idp = proprietario.getText().toString().split("-")[1].trim();
         p.setId(Integer.parseInt(idp));
         a.setPropietario(p);
         a.setStatus("Ativo");

@@ -50,6 +50,32 @@ public class ProprietariosForm extends AppCompatActivity {
             }
         });
 
+
+
+        //update proprietario
+
+
+        Intent intent = getIntent();
+        Bundle params = intent.getExtras();
+
+        if (params != null) {
+
+            int idp = params.getInt("id");
+            //System.out.println("o parametro que recebi foi"+idarvore);
+            ControleProprietario ca = new ControleProprietario();
+            Proprietario p = ca.obterProprietario(idp);
+            id.setText("" + p.getId());
+            nome.setText(""+p.getNome());
+            identificacao.setText(""+p.getIdentificacao());
+            rua.setText(""+p.getEnderecoRua());
+            cidade.setText(""+p.getCidade().getId());
+            latitude.setText(""+p.getLatitude());
+            longitude.setText(""+p.getLongitude());
+
+
+        }
+
+
     }
 
 

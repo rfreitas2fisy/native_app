@@ -117,10 +117,11 @@ public class ArvoresList extends AppCompatActivity {
     }
 
 
-    public int obterIdGrid(String dados) { //recebe os dados contidos na grid e retorna o id
+    //POG
+    public static int obterIdGrid(String dados) { //recebe os dados contidos na grid e retorna o id
         String ret = "";
         for (int i = 4; i < dados.length(); i++) {
-            if (dados.charAt(i) != 'P') {
+            if (dados.charAt(i) != 'P' ) { //
                 if (dados.charAt(i) == '0' || dados.charAt(i) == '1' || dados.charAt(i) == '2' || dados.charAt(i) == '3' || dados.charAt(i) == '4' || dados.charAt(i) == '5' || dados.charAt(i) == '6' || dados.charAt(i) == '7' || dados.charAt(i) == '8' || dados.charAt(i) == '9') {
                     ret += dados.charAt(i);
 
@@ -135,5 +136,6 @@ public class ArvoresList extends AppCompatActivity {
         int retorno = Integer.parseInt("" + ret);
         return retorno;
     }
+
 
 }

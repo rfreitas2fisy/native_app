@@ -8,6 +8,7 @@ import android.widget.Toast;
  */
 public class Util {
 
+
     public static String encodeString(String palavra) {
         char one;
         StringBuffer n = new StringBuffer(palavra.length());
