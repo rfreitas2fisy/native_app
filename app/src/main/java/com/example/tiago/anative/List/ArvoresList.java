@@ -105,7 +105,7 @@ public class ArvoresList extends AppCompatActivity {
             ArrayList<Arvore> arvores = ca.obterTodasArvores();
             String[] retorno = new String[arvores.size()];
             for (int i = 0; i < arvores.size(); i++) {
-                retorno[i] = "ID: " + arvores.get(i).getId() + " \nProp: " + arvores.get(i).getPropietario().getNome() + " \nLat: " + arvores.get(i).getLatitude() + "" + " \nLong:: " + arvores.get(i).getLongitude();
+                retorno[i] = "ID: " + arvores.get(i).getId() + " \nProp: " + arvores.get(i).getPropietario().getNome();
 
             }
             return retorno;

@@ -14,6 +14,8 @@ import com.example.tiago.anative.Modelo.Cidade;
 import com.example.tiago.anative.Modelo.Proprietario;
 import com.example.tiago.anative.R;
 
+import java.util.ArrayList;
+
 public class ProprietariosForm extends AppCompatActivity {
 
     EditText id = null;
@@ -73,7 +75,10 @@ public class ProprietariosForm extends AppCompatActivity {
 
         }
 
+
+
     }
+
 
 
 }

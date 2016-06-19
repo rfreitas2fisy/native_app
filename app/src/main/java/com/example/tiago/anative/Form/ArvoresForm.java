@@ -14,6 +14,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -22,6 +24,8 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.example.tiago.anative.Controle.ControleArvore;
+import com.example.tiago.anative.Controle.ControleEspecie;
+import com.example.tiago.anative.Controle.ControleProprietario;
 import com.example.tiago.anative.Controle.Util;
 import com.example.tiago.anative.List.MenuList;
 import com.example.tiago.anative.List.SolicitacoesList;
@@ -43,8 +47,8 @@ public class ArvoresForm extends AppCompatActivity implements LocationListener {
     EditText longitude = null;
     EditText idade = null;
     EditText geocode = null;
-    EditText especie = null;
-    EditText proprietario = null;
+    AutoCompleteTextView especie = null;
+    AutoCompleteTextView proprietario = null;
     CheckBox ativo = null;
 
     Button salvar = null;
@@ -52,7 +56,7 @@ public class ArvoresForm extends AppCompatActivity implements LocationListener {
     Button verMapa = null;
     LocationManager lm = null; // usado para pegar posição gps
     boolean atualizouLoc = false; //usado para vefificar se a posição gps foi atualizad
-    Arvore v=null;
+    Arvore v = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,9 +69,34 @@ public class ArvoresForm extends AppCompatActivity implements LocationListener {
         longitude = (EditText) findViewById(R.id.logetude);
         idade = (EditText) findViewById(R.id.idade);
         geocode = (EditText) findViewById(R.id.geocode);
-        especie = (EditText) findViewById(R.id.especie_idespecie);
+        especie = (AutoCompleteTextView) findViewById(R.id.especie_idespecie);
 
-        proprietario = (EditText) findViewById(R.id.proprietaro);
+        ControleEspecie ce = new ControleEspecie();
+ArrayList<Especie> arrayEspecies = ce.obterTodasEspecies();
+
+
+
+        String[] listaItens = new String[arrayEspecies.size()];
+        for (int i=0; i< arrayEspecies.size(); i++)
+        {
+         listaItens[i] =  "Id: "+arrayEspecies.get(i).getId()+" - "+ arrayEspecies.get(i).getNome();
+        }
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.item, listaItens);
+        especie.setAdapter(adapter);
+
+
+        proprietario = (AutoCompleteTextView) findViewById(R.id.proprietaro);
+        ControleProprietario cp = new ControleProprietario();
+        ArrayList<Proprietario> arrayProprietarios = cp.obterTodosProprietarios();
+        String[] listaItensP = new String[arrayProprietarios.size()];
+        for (int i=0; i< arrayProprietarios.size(); i++)
+        {
+            listaItensP[i] =  "Id - "+arrayProprietarios.get(i).getId()+" - "+ arrayProprietarios.get(i).getNome();
+        }
+
+        ArrayAdapter<String> adapterP = new ArrayAdapter<String>(this, R.layout.item, listaItensP);
+        proprietario.setAdapter(adapterP);
+
         salvar = (Button) findViewById(R.id.btn_salvar);
         salvar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,11 +122,10 @@ public class ArvoresForm extends AppCompatActivity implements LocationListener {
                 startActivity(secondActivity);
 
 
-
                 ArrayList<String> parametros = new ArrayList<String>(); //pos 0 = lat pos1 = long pos2 = desc arv
 
-                    parametros.add(0, latitude.getText().toString());
-                    parametros.add(1, longitude.getText().toString());
+                parametros.add(0, latitude.getText().toString());
+                parametros.add(1, longitude.getText().toString());
                 try {
                     ControleArvore ca = new ControleArvore();
                     Arvore a = ca.consultarArvore(Integer.parseInt(id.getText().toString()));
@@ -107,7 +135,7 @@ public class ArvoresForm extends AppCompatActivity implements LocationListener {
                     parametros.add(2, "Não foi possivel consultar o proprietario");
 
                 }
-                    params.putStringArrayList("dados",parametros);
+                params.putStringArrayList("dados", parametros);
 
 
                 secondActivity.putExtras(params);
@@ -119,34 +147,30 @@ public class ArvoresForm extends AppCompatActivity implements LocationListener {
         //update arvore
 
 
-            Intent intent = getIntent();
-            Bundle params = intent.getExtras();
+        Intent intent = getIntent();
+        Bundle params = intent.getExtras();
 
-            if(params!=null)
-            {
-                verMapa.setClickable(true);
-                int idarvore = params.getInt("id");
-                //System.out.println("o parametro que recebi foi"+idarvore);
-                ControleArvore ca = new ControleArvore();
-                 v = ca.consultarArvore(idarvore);
-                id.setText(""+v.getId());
-                idade.setText(""+v.getIdade());
-                longitude.setText(""+v.getLongitude());
-                latitude.setText(""+v.getLatitude());
-                geocode.setText(""+v.getEnderecoGeoCode());
-                especie.setText(""+v.getEspecie().getId());
-                proprietario.setText(""+v.getPropietario().getId());
+        if (params != null) {
+            verMapa.setClickable(true);
+            int idarvore = params.getInt("id");
+            //System.out.println("o parametro que recebi foi"+idarvore);
+            ControleArvore ca = new ControleArvore();
+            v = ca.consultarArvore(idarvore);
+            id.setText("" + v.getId());
+            idade.setText("" + v.getIdade());
+            longitude.setText("" + v.getLongitude());
+            latitude.setText("" + v.getLatitude());
+            geocode.setText("" + v.getEnderecoGeoCode());
+            especie.setText("" + v.getEspecie().getId() + " - "+v.getEspecie().getNome());
+            proprietario.setText("" + v.getPropietario().getId() +" - "+ v.getPropietario().getNome() );
+            ativo.setChecked(true);
+            if (v.getStatus().equalsIgnoreCase("Ativo")) {
+                System.out.println("setei no ativo");
                 ativo.setSelected(true);
-                if(v.getStatus().equals("Ativo"))
-                {
-                    System.out.println("setei no ativo");
-                    ativo.setSelected(true);
-                } else {
-                    System.out.println("setei como inativo");
-                    ativo.setSelected(false);
-                }
-
-
+            } else {
+                System.out.println("setei como inativo");
+                ativo.setSelected(false);
+            }
 
 
             //setContentView(textView);
@@ -193,17 +217,19 @@ public class ArvoresForm extends AppCompatActivity implements LocationListener {
         a.setId(Integer.parseInt(id.getText().toString()));
         a.setEnderecoGeoCode(geocode.getText().toString());
         Especie e = new Especie();
-        e.setId(Integer.parseInt(especie.getText().toString()));
+        String ide = especie.getText().toString().split("-")[1];
+        e.setId(Integer.parseInt(ide));
         a.setEspecie(e);
 
         a.setIdade(Integer.parseInt(idade.getText().toString()));
         a.setLatitude(latitude.getText().toString());
         a.setLongitude(longitude.getText().toString());
         Proprietario p = new Proprietario();
-        p.setId(Integer.parseInt(proprietario.getText().toString()));
+        String idp = proprietario.getText().toString().split("-")[1];
+        p.setId(Integer.parseInt(idp));
         a.setPropietario(p);
         a.setStatus("Ativo");
-        if (ativo.isSelected()) {
+        if (ativo.isChecked()) {
             a.setStatus("Ativo");
         } else {
             a.setStatus("Inativo");
@@ -214,9 +240,10 @@ public class ArvoresForm extends AppCompatActivity implements LocationListener {
         try {
             if (ca.salvarArvore(a)) {
                 Util.exibeMensagem("Registro salvo com sucesso", getApplicationContext());
-            } else Util.exibeMensagem("Erro na ao salvar", getApplicationContext());
+            } else
+                Util.exibeMensagem("Erro na ao salvar, verifique os dados", getApplicationContext());
         } catch (Exception exception) {
-            Util.exibeMensagem("Erro na conexao", getApplicationContext());
+            Util.exibeMensagem("Erro na conexao, ex" + exception, getApplicationContext());
         }
 
     }
@@ -235,12 +262,12 @@ public class ArvoresForm extends AppCompatActivity implements LocationListener {
             Geocoder geocoder = new Geocoder(ArvoresForm.this);
             try {
                 List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-                String gc = addresses.get(0).getAddressLine(0) + ", " + addresses.get(0).getAddressLine(1) + ", " + addresses.get(0).getAddressLine(2) + ",  "  + addresses.get(0).getAddressLine(3) + ", ";
+                String gc = addresses.get(0).getAddressLine(0) + ", " + addresses.get(0).getAddressLine(1) + ", " + addresses.get(0).getAddressLine(2) + ",  " + addresses.get(0).getAddressLine(3) + ", ";
                 geocode.setText("" + gc);
             } catch (IOException e) {
-                Util.exibeMensagem("Erro: "+e, getApplicationContext());
+                Util.exibeMensagem("Erro: " + e, getApplicationContext());
                 geocode.setText("" + e);
-                 e.printStackTrace();
+                e.printStackTrace();
             }
             atualizouLoc = true;
 
@@ -251,6 +278,10 @@ public class ArvoresForm extends AppCompatActivity implements LocationListener {
         } else
             Util.exibeMensagem("Sem latitude e longitude", getApplicationContext());
 
+    }
+
+    public boolean validaDados() {
+        return true;
     }
 
     public void stopLocationUpdates() {

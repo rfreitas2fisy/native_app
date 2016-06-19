@@ -22,6 +22,7 @@ public class ConexaoWeb extends AsyncTask<String, Void, String> {
 
     public String getDataFromWebService(String url) {
         url = ipServer +url; // concatenado o ip do servidor com o caminho a ser chamado
+url=Util.encodeString(url);
         System.out.println("a url foi "+url);
 
         String responseStr = "";
