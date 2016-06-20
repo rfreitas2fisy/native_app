@@ -56,7 +56,6 @@ public class ArvoresForm extends AppCompatActivity implements LocationListener {
     Button salvar = null;
     Button btGps = null;
     Button verMapa = null;
-    Button btFoto = null;
     Button abrirMaps = null;// usado para abrir o google maps com destino no ponto
     LocationManager lm = null; // usado para pegar posição gps
     boolean atualizouLoc = false; //usado para vefificar se a posição gps foi atualizad
@@ -122,14 +121,7 @@ ArrayList<Especie> arrayEspecies = ce.obterTodasEspecies();
                 abrirMaps();
             }
         });
-        btFoto = (Button) findViewById(R.id.bt_foto);
-        btFoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ArvoresForm.this, CameraActivity.class);
-                startActivity(intent);
-            }
-        });
+
         ativo = (CheckBox) findViewById(R.id.cb_ativo);
         verMapa = (Button) findViewById(R.id.bt_ver_mapa);
         verMapa.setClickable(false);
