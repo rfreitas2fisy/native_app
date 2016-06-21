@@ -9,12 +9,13 @@ import java.util.concurrent.ExecutionException;
  */
 public class ControleUsuario {
     public boolean logar(Usuario usuario) {
-        boolean ret = false;
+
 
         String retornoWeb = "";
 
-        try {
-            retornoWeb = new ConexaoWeb().execute("/NativeServer/actions?acao=autenticar&user="+usuario.getLogin()+"&pass="+usuario.getSenha()+"", "").get();
+        try {String url = "/NativeServer/actions?acao=autenticar&user="+ usuario.getLogin() + "&pass=" + usuario.getSenha() + "";
+            url = Util.encodeString(url);
+            retornoWeb = new ConexaoWeb().execute(url, "").get();
         } catch (InterruptedException e) {
             retornoWeb = "erro ao conectar com o servidor";
             e.printStackTrace();
@@ -22,10 +23,24 @@ public class ControleUsuario {
             e.printStackTrace();
         }
 
-if (retornoWeb.equalsIgnoreCase("0")) // nao encontrou um registro com o nome de usuario e senha informados
-{
-    return false;
-} else return true;
+        if (retornoWeb.equalsIgnoreCase("0")) // nao encontrou um registro com o nome de usuario e senha informados
+        {
+            return false;
+        } else if (retornoWeb.equalsIgnoreCase("erro ao conectar com o servidor")) {
+            return false;
+        } else {
+
+            try {
+                int id = Integer.parseInt(retornoWeb);
+                return true;
+            }catch (Exception ex)
+            {
+
+                return false;
+            }
+
+
+        }
     }
 
 

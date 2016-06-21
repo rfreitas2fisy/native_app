@@ -74,8 +74,9 @@ public class LoginForm extends AppCompatActivity {
 
             arrayValidacao.add(true);
         }
-        Util.exibeMensagem(retorno, getApplicationContext());
         if (arrayValidacao.contains(false)) {
+            Util.exibeMensagem(retorno, getApplicationContext());
+
             return false;
         } else return true;
     }

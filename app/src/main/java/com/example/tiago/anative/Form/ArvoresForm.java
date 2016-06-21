@@ -56,7 +56,7 @@ public class ArvoresForm extends AppCompatActivity implements LocationListener {
     Button salvar = null;
     Button btGps = null;
     Button verMapa = null;
-    Button abrirMaps = null;// usado para abrir o google maps com destino no ponto
+
     LocationManager lm = null; // usado para pegar posição gps
     boolean atualizouLoc = false; //usado para vefificar se a posição gps foi atualizad
     Arvore v = null;
@@ -73,32 +73,10 @@ public class ArvoresForm extends AppCompatActivity implements LocationListener {
         idade = (EditText) findViewById(R.id.idade);
         geocode = (EditText) findViewById(R.id.geocode);
         especie = (AutoCompleteTextView) findViewById(R.id.especie_idespecie);
-
-        ControleEspecie ce = new ControleEspecie();
-ArrayList<Especie> arrayEspecies = ce.obterTodasEspecies();
-
-
-
-        String[] listaItens = new String[arrayEspecies.size()];
-        for (int i=0; i< arrayEspecies.size(); i++)
-        {
-         listaItens[i] =  "Id- "+arrayEspecies.get(i).getId()+" - "+ arrayEspecies.get(i).getNome();
-        }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.item, listaItens);
-        especie.setAdapter(adapter);
-
+        definirEspecies(); //carrega especies para o AutoCompleteTextView
 
         proprietario = (AutoCompleteTextView) findViewById(R.id.proprietaro);
-        ControleProprietario cp = new ControleProprietario();
-        ArrayList<Proprietario> arrayProprietarios = cp.obterTodosProprietarios();
-        String[] listaItensP = new String[arrayProprietarios.size()];
-        for (int i=0; i< arrayProprietarios.size(); i++)
-        {
-            listaItensP[i] =  "Id - "+arrayProprietarios.get(i).getId()+" - "+ arrayProprietarios.get(i).getNome();
-        }
-
-        ArrayAdapter<String> adapterP = new ArrayAdapter<String>(this, R.layout.item, listaItensP);
-        proprietario.setAdapter(adapterP);
+        defineProprietarios();  //carrega proprietarios para o AutoCompleteTextView
 
         salvar = (Button) findViewById(R.id.btn_salvar);
         salvar.setOnClickListener(new View.OnClickListener() {
@@ -114,13 +92,7 @@ ArrayList<Especie> arrayEspecies = ce.obterTodasEspecies();
                 attLocalizacao();
             }
         });
-        abrirMaps= (Button) findViewById(R.id.bt_me_leve);
-        abrirMaps.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                abrirMaps();
-            }
-        });
+
 
         ativo = (CheckBox) findViewById(R.id.cb_ativo);
         verMapa = (Button) findViewById(R.id.bt_ver_mapa);
@@ -128,34 +100,12 @@ ArrayList<Especie> arrayEspecies = ce.obterTodasEspecies();
         verMapa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle params = new Bundle();
-                Intent secondActivity = new Intent(ArvoresForm.this, MapsActivity.class);
-                startActivity(secondActivity);
-
-
-                ArrayList<String> parametros = new ArrayList<String>(); //pos 0 = lat pos1 = long pos2 = desc arv
-
-                parametros.add(0, latitude.getText().toString());
-                parametros.add(1, longitude.getText().toString());
-                try {
-                    ControleArvore ca = new ControleArvore();
-                    Arvore a = ca.consultarArvore(Integer.parseInt(id.getText().toString()));
-                    parametros.add(a.getGoogleMapsData());
-
-                } catch (Exception ex) {
-                    parametros.add(2, "Não foi possivel consultar o proprietario");
-
-                }
-                params.putStringArrayList("dados", parametros);
-
-
-                secondActivity.putExtras(params);
-                startActivity(secondActivity);
+                abrirMapa();
             }
         });
 
 
-        //update arvore
+        //update arvore recebdno parametro
 
 
         Intent intent = getIntent();
@@ -164,51 +114,80 @@ ArrayList<Especie> arrayEspecies = ce.obterTodasEspecies();
         if (params != null) {
             verMapa.setClickable(true);
             int idarvore = params.getInt("id");
-            //System.out.println("o parametro que recebi foi"+idarvore);
-            ControleArvore ca = new ControleArvore();
+        ControleArvore ca = new ControleArvore();
             v = ca.consultarArvore(idarvore);
             id.setText("" + v.getId());
             idade.setText("" + v.getIdade());
             longitude.setText("" + v.getLongitude());
             latitude.setText("" + v.getLatitude());
             geocode.setText("" + v.getEnderecoGeoCode());
-            especie.setText("" + v.getEspecie().getId() + " - "+v.getEspecie().getNome());
-            proprietario.setText("" + v.getPropietario().getId() +" - "+ v.getPropietario().getNome() );
+            especie.setText("" + v.getEspecie().getId() + " - " + v.getEspecie().getNome());
+            proprietario.setText("" + v.getPropietario().getId() + " - " + v.getPropietario().getNome());
             ativo.setChecked(true);
             if (v.getStatus().equalsIgnoreCase("Ativo")) {
-                System.out.println("setei no ativo");
-                ativo.setChecked(true);
+                             ativo.setChecked(true);
             } else {
-                System.out.println("setei como inativo");
-                ativo.setSelected(false);
+                             ativo.setSelected(false);
             }
 
-
-            //setContentView(textView);
         }
 
     }
 
-    private void abrirMaps() {
-        // Create a Uri from an intent string. Use the result to create an Intent.
-//Util.exibeMensagem("Abrindo",getApplicationContext());
-  //                      Uri gmmIntentUri = Uri.parse("google.streetview:cbll="+latitude.getText().toString()+","+longitude.getText().toString());
+    private void abrirMapa() {
+        Bundle params = new Bundle();
+        Intent secondActivity = new Intent(ArvoresForm.this, MapsActivity.class);
+        startActivity(secondActivity);
 
-// Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
-    //    Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-// Make the Intent explicit by setting the Google Maps package
-      //  mapIntent.setPackage("com.google.android.apps.maps");
 
-// Attempt to start an activity that can handle the Intent
-        //startActivity(mapIntent);
-        Uri gmmIntentUri = Uri.parse("geo:"+latitude.getText().toString()+","+longitude.getText().toString());
-        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-        mapIntent.setPackage("com.google.android.apps.maps");
-        if (mapIntent.resolveActivity(getPackageManager()) != null) {
-            startActivity(mapIntent);
+        ArrayList<String> parametros = new ArrayList<String>(); //pos 0 = lat pos1 = long pos2 = desc arv
+
+        parametros.add(0, latitude.getText().toString());
+        parametros.add(1, longitude.getText().toString());
+        try {
+            ControleArvore ca = new ControleArvore();
+            Arvore a = ca.consultarArvore(Integer.parseInt(id.getText().toString()));
+            parametros.add(a.getGoogleMapsData());
+
+        } catch (Exception ex) {
+            parametros.add(2, "Não foi possivel consultar o proprietario");
+
         }
+        params.putStringArrayList("dados", parametros);
+
+
+        secondActivity.putExtras(params);
+        startActivity(secondActivity);
 
     }
+
+    private void defineProprietarios() {
+        ControleProprietario cp = new ControleProprietario();
+        ArrayList<Proprietario> arrayProprietarios = cp.obterTodosProprietarios();
+        String[] listaItensP = new String[arrayProprietarios.size()];
+        for (int i = 0; i < arrayProprietarios.size(); i++) {
+            listaItensP[i] = "Id - " + arrayProprietarios.get(i).getId() + " - " + arrayProprietarios.get(i).getNome();
+        }
+
+        ArrayAdapter<String> adapterP = new ArrayAdapter<String>(this, R.layout.item, listaItensP);
+        proprietario.setAdapter(adapterP);
+    }
+
+    private void definirEspecies() {
+
+        ControleEspecie ce = new ControleEspecie();
+        ArrayList<Especie> arrayEspecies = ce.obterTodasEspecies();
+
+
+        String[] listaItens = new String[arrayEspecies.size()];
+        for (int i = 0; i < arrayEspecies.size(); i++) {
+            listaItens[i] = "Id- " + arrayEspecies.get(i).getId() + " - " + arrayEspecies.get(i).getNome();
+        }
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.item, listaItens);
+        especie.setAdapter(adapter);
+
+    }
+
 
     public void startList(View view) {
 

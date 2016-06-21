@@ -317,19 +317,9 @@
             android:background="#9EC934"
             android:layout_alignTop="@+id/btn_salvar"
             android:layout_alignRight="@+id/status"
-            android:layout_alignEnd="@+id/status" />
-
-        <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Me leve "
-            android:id="@+id/bt_me_leve"
-            android:background="#9EC934"
-            android:textColor="#ffffff"
-            android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@+id/btn_salvar"
-            android:layout_toEndOf="@+id/btn_salvar" />
+            android:layout_alignEnd="@+id/status"
+            android:layout_toRightOf="@+id/textView4"
+            android:layout_toEndOf="@+id/textView4" />
 
     </RelativeLayout>
 </RelativeLayout>
