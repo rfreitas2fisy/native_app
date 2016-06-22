@@ -9,6 +9,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.net.Uri;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -114,20 +115,21 @@ public class ArvoresForm extends AppCompatActivity implements LocationListener {
         if (params != null) {
             verMapa.setClickable(true);
             int idarvore = params.getInt("id");
-        ControleArvore ca = new ControleArvore();
+            ControleArvore ca = new ControleArvore();
             v = ca.consultarArvore(idarvore);
             id.setText("" + v.getId());
             idade.setText("" + v.getIdade());
             longitude.setText("" + v.getLongitude());
             latitude.setText("" + v.getLatitude());
             geocode.setText("" + v.getEnderecoGeoCode());
-            especie.setText("" + v.getEspecie().getId() + " - " + v.getEspecie().getNome());
-            proprietario.setText("" + v.getPropietario().getId() + " - " + v.getPropietario().getNome());
+            especie.setText("Id- " + v.getEspecie().getId() + " - " + v.getEspecie().getNome());
+            ;
+            proprietario.setText("Id - " + v.getPropietario().getId() + " - " + v.getPropietario().getNome());
             ativo.setChecked(true);
             if (v.getStatus().equalsIgnoreCase("Ativo")) {
-                             ativo.setChecked(true);
+                ativo.setChecked(true);
             } else {
-                             ativo.setSelected(false);
+                ativo.setChecked(false);
             }
 
         }
@@ -150,7 +152,7 @@ public class ArvoresForm extends AppCompatActivity implements LocationListener {
             parametros.add(a.getGoogleMapsData());
 
         } catch (Exception ex) {
-            parametros.add(2, "Não foi possivel consultar o proprietario");
+            parametros.add(2, "Não foi possivel consultar");
 
         }
         params.putStringArrayList("dados", parametros);
@@ -204,7 +206,7 @@ public class ArvoresForm extends AppCompatActivity implements LocationListener {
 
             lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             //    Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER); //esse metodo só pega a ultima localizacao conhecida, não é o caso
-            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this); // pedir atualizacao localizacao e aguardar
+            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, this); // pedir atualizacao localizacao e aguardar
             Util.exibeMensagem("Pedido atualizacao de GPS", getApplicationContext());
 
 
@@ -320,7 +322,18 @@ public class ArvoresForm extends AppCompatActivity implements LocationListener {
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-        Util.exibeMensagem("Statuts changed!", getApplicationContext());
+        switch (status) {
+            case LocationProvider.AVAILABLE:
+                Util.exibeMensagem(("GPS available again\n"), getApplicationContext());
+                break;
+            case LocationProvider.OUT_OF_SERVICE:
+                Util.exibeMensagem(("GPS out of service\n"), getApplicationContext());
+                break;
+            case LocationProvider.TEMPORARILY_UNAVAILABLE:
+                Util.exibeMensagem(("GPS temporarily unavailable\n"), getApplicationContext());
+                break;
+        }
+
     }
 
     @Override
