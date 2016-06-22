@@ -123,8 +123,7 @@ public class ArvoresForm extends AppCompatActivity implements LocationListener {
             latitude.setText("" + v.getLatitude());
             geocode.setText("" + v.getEnderecoGeoCode());
             especie.setText("Id- " + v.getEspecie().getId() + " - " + v.getEspecie().getNome());
-            ;
-            proprietario.setText("Id - " + v.getPropietario().getId() + " - " + v.getPropietario().getNome());
+                        proprietario.setText("Id - " + v.getPropietario().getId() + " - " + v.getPropietario().getNome());
             ativo.setChecked(true);
             if (v.getStatus().equalsIgnoreCase("Ativo")) {
                 ativo.setChecked(true);
