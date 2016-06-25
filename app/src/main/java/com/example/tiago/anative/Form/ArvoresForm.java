@@ -206,7 +206,9 @@ public class ArvoresForm extends AppCompatActivity implements LocationListener {
             lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             //    Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER); //esse metodo só pega a ultima localizacao conhecida, não é o caso
             lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, this); // pedir atualizacao localizacao e aguardar
-            Util.exibeMensagem("Pedido atualizacao de GPS", getApplicationContext());
+            Util.exibeMensagem("Pedido atualizacao de GPS." +
+                    "\nAguarde atualização da localização." +
+                    "\nGps não funciona em locais fechados!", getApplicationContext());
 
 
         } else {
@@ -225,41 +227,43 @@ public class ArvoresForm extends AppCompatActivity implements LocationListener {
 
 
     private void salvarArvore() {
-        Arvore a = new Arvore();
-        a.setId(Integer.parseInt(id.getText().toString()));
-        a.setEnderecoGeoCode(geocode.getText().toString());
-        Especie e = new Especie();
-        String ide = especie.getText().toString().split("-")[1].trim();
-        e.setId(Integer.parseInt(ide));
-        a.setEspecie(e);
 
-        a.setIdade(Integer.parseInt(idade.getText().toString()));
-        a.setLatitude(latitude.getText().toString());
-        a.setLongitude(longitude.getText().toString());
-        Proprietario p = new Proprietario();
-        String idp = proprietario.getText().toString().split("-")[1].trim();
-        p.setId(Integer.parseInt(idp));
-        a.setPropietario(p);
-        a.setStatus("Ativo");
-        if (ativo.isChecked()) {
+        if (validarDados()) {
+            Arvore a = new Arvore();
+            a.setId(Integer.parseInt(id.getText().toString()));
+            a.setEnderecoGeoCode(geocode.getText().toString());
+            Especie e = new Especie();
+            String ide = especie.getText().toString().split("-")[1].trim();
+            e.setId(Integer.parseInt(ide));
+            a.setEspecie(e);
+
+            a.setIdade(Integer.parseInt(idade.getText().toString()));
+            a.setLatitude(latitude.getText().toString());
+            a.setLongitude(longitude.getText().toString());
+            Proprietario p = new Proprietario();
+            String idp = proprietario.getText().toString().split("-")[1].trim();
+            p.setId(Integer.parseInt(idp));
+            a.setPropietario(p);
             a.setStatus("Ativo");
-        } else {
-            a.setStatus("Inativo");
+            if (ativo.isChecked()) {
+                a.setStatus("Ativo");
+            } else {
+                a.setStatus("Inativo");
+
+            }
+
+            ControleArvore ca = new ControleArvore();
+            try {
+                if (ca.salvarArvore(a)) {
+                    Util.exibeMensagem("Registro salvo com sucesso", getApplicationContext());
+                } else
+                    Util.exibeMensagem("Erro na ao salvar, verifique os dados", getApplicationContext());
+            } catch (Exception exception) {
+                Util.exibeMensagem("Erro na conexao, ex" + exception, getApplicationContext());
+            }
 
         }
-
-        ControleArvore ca = new ControleArvore();
-        try {
-            if (ca.salvarArvore(a)) {
-                Util.exibeMensagem("Registro salvo com sucesso", getApplicationContext());
-            } else
-                Util.exibeMensagem("Erro na ao salvar, verifique os dados", getApplicationContext());
-        } catch (Exception exception) {
-            Util.exibeMensagem("Erro na conexao, ex" + exception, getApplicationContext());
-        }
-
     }
-
 
     @Override
     public void onLocationChanged(Location location) { //garante que foi atualizada a loc
@@ -278,7 +282,7 @@ public class ArvoresForm extends AppCompatActivity implements LocationListener {
                 geocode.setText("" + gc);
             } catch (IOException e) {
                 Util.exibeMensagem("Erro: " + e, getApplicationContext());
-                geocode.setText("" + e);
+                geocode.setText("Não foi possivel obter GeoCode");
                 e.printStackTrace();
             }
             atualizouLoc = true;
@@ -290,10 +294,6 @@ public class ArvoresForm extends AppCompatActivity implements LocationListener {
         } else
             Util.exibeMensagem("Sem latitude e longitude", getApplicationContext());
 
-    }
-
-    public boolean validaDados() {
-        return true;
     }
 
     public void stopLocationUpdates() {
@@ -344,4 +344,72 @@ public class ArvoresForm extends AppCompatActivity implements LocationListener {
     public void onProviderDisabled(String provider) {
         Util.exibeMensagem("Provider disabled!", getApplicationContext());
     }
+
+
+    public Boolean validarDados() {
+        ArrayList<Boolean> arrayValidacao = new ArrayList<Boolean>();
+        String retorno = "São obrigatórios:"+"";
+        if (geocode.getText().toString().length() < 1) {
+            retorno += "\n GeoCode";
+            arrayValidacao.add(false);
+        } else {
+
+            arrayValidacao.add(true);
+        }
+
+        if (idade.getText().toString().length() < 1) {
+            retorno += "\n Idade";
+            arrayValidacao.add(false);
+        } else {
+
+            arrayValidacao.add(true);
+        }
+
+        if (especie.getText().toString().length() < 1) {
+            retorno += "\n Espécie ";
+            arrayValidacao.add(false);
+        } else {
+
+            arrayValidacao.add(true);
+        }
+
+        if (proprietario.getText().toString().length() < 1) {
+            retorno += "\n Proprietário ";
+            arrayValidacao.add(false);
+        } else {
+
+            arrayValidacao.add(true);
+        }
+
+        if (id.getText().toString().length() < 1) {
+            retorno += "\n ID";
+            arrayValidacao.add(false);
+        } else {
+
+            arrayValidacao.add(true);
+        }
+
+
+        if (latitude.getText().toString().length() < 1) {
+            retorno += "\n Latitude";
+            arrayValidacao.add(false);
+        } else {
+
+            arrayValidacao.add(true);
+        }
+        if (longitude.getText().toString().length() < 1) {
+            retorno += "\n Longitude";
+            arrayValidacao.add(false);
+        } else {
+
+            arrayValidacao.add(true);
+        }
+
+        if (arrayValidacao.contains(false)) {
+            Util.exibeMensagem(retorno, getApplicationContext());
+            return false;
+        } else return true;
+    }
+
+
 }

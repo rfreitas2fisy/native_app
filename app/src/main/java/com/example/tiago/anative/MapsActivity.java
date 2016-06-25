@@ -35,8 +35,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (params != null) {
             //Util.exibeMensagem("Parans ok", getApplicationContext());
             dadosMapa = params.getStringArrayList("dados");
-        }
-        else dadosMapa = new ArrayList<String>();
+        } else dadosMapa = new ArrayList<String>();
     }
 
 
@@ -56,15 +55,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Add a marker in Sydney and move the camera
         if (dadosMapa != null) {
             for (int i = 0; i < dadosMapa.size() - 2; i = i + 3) {
-                double latitude = Double.parseDouble(dadosMapa.get(i));
-                double longitude = Double.parseDouble(dadosMapa.get(i + 1));
-                String obs = (dadosMapa.get(i + 2));
-                LatLng pontomapa = new LatLng(latitude, longitude);
+                try {
+                    double latitude = Double.parseDouble(dadosMapa.get(i));
+                    double longitude = Double.parseDouble(dadosMapa.get(i + 1));
+                    String obs = (dadosMapa.get(i + 2));
+                    LatLng pontomapa = new LatLng(latitude, longitude);
 
 
-                mMap.addMarker(new MarkerOptions().position(pontomapa).title(obs));
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(pontomapa));
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pontomapa, 15));
+                    mMap.addMarker(new MarkerOptions().position(pontomapa).title(obs));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(pontomapa));
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pontomapa, 15));
+
+                } catch (Exception ex) {
+
+                }
 
 
             }

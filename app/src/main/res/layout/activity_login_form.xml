@@ -79,7 +79,7 @@ android:weightSum="1">
         android:layout_gravity="center_horizontal"
         android:textColorHint="#ffffff"
         android:textSize="16dp"
-        android:inputType="textVisiblePassword" />
+        android:inputType="textPassword" />
 
     <Button
         android:layout_width="270dp"

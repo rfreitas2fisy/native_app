@@ -1,6 +1,7 @@
 package com.example.tiago.anative.List;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -41,6 +42,17 @@ public class ArvoresList extends AppCompatActivity {
                 ArrayList<Arvore> arvores = ca.obterTodasArvores();
                 ArrayList<String> parametros = new ArrayList<String>(); //pos 0 = lat pos1 = long pos2 = desc arv
                 for (int i = 0; i < arvores.size(); i++) {
+                    try{
+                        double a = Double.parseDouble(arvores.get(i).getLatitude());
+                        double b = Double.parseDouble(arvores.get(i).getLongitude());
+
+                        parametros.add(arvores.get(i).getLatitude());
+                        parametros.add(arvores.get(i).getLongitude());
+                        parametros.add(arvores.get(i).getGoogleMapsData());
+                    }catch (Exception ex)
+                    {
+                        Util.exibeMensagem("Arvore "+arvores.get(i).getId()+" não tem uma localização valida",getApplicationContext());
+                    }
                     parametros.add(arvores.get(i).getLatitude());
                     parametros.add(arvores.get(i).getLongitude());
                     parametros.add(arvores.get(i).getGoogleMapsData());
@@ -66,7 +78,10 @@ public class ArvoresList extends AppCompatActivity {
 
         gridview = (GridView) findViewById(R.id.gridView);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, getArvoresGrid());
+                R.layout.grid_item, getArvoresGrid());
+
+        gridview.setVerticalSpacing(1);
+        gridview.setHorizontalSpacing(1);
 
         gridview.setAdapter(adapter);
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -105,7 +120,10 @@ public class ArvoresList extends AppCompatActivity {
             ArrayList<Arvore> arvores = ca.obterTodasArvores();
             String[] retorno = new String[arvores.size()];
             for (int i = 0; i < arvores.size(); i++) {
-                retorno[i] = "ID: " + arvores.get(i).getId() + " \nProp: " + arvores.get(i).getPropietario().getNome();
+                retorno[i] = "ID: " + arvores.get(i).getId() + "" +
+                        "\nProprietario: " + arvores.get(i).getPropietario().getNome()+"" +
+                        "\nEndereço: "+arvores.get(i).getEnderecoGeoCode()+"" +
+                        "\n";
 
             }
             return retorno;

@@ -104,11 +104,36 @@ public class Interpretador {
         p.setEnderecoRua(proprietarios[4]);
         Cidade c = new Cidade();
         c.setId(Integer.parseInt(proprietarios[5]));
+        c.setNome(proprietarios[6]);
         p.setCidade(c);
         return p;
 
     }
 
 
+    public ArrayList<Cidade> LerCidadesWeb(String retornoWeb) {
+
+
+
+        String[] vet = retornoWeb.split("cidade"); //cada posicao do vetor ira ter os dados de uma cidade
+        ArrayList<Cidade> cidades = new ArrayList();
+        for (int i = 1; i < vet.length; i++) {
+            cidades.add(DecodificarCidade(vet[i]));
+
+
+        }
+
+        return cidades;
+    }
+
+    private Cidade DecodificarCidade(String cidadeCodifica) {
+        String[] cidades = cidadeCodifica.split(caracterDivisor);
+        Cidade e = new Cidade();
+        e.setId(Integer.parseInt(cidades[1]));
+        e.setNome(cidades[2]);
+//        e.setDscricao(especies[3]);
+        return e;
+
+    }
 }
 

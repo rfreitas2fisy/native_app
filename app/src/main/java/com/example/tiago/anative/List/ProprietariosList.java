@@ -40,8 +40,10 @@ public class ProprietariosList extends AppCompatActivity {
 
         gridview = (GridView) findViewById(R.id.gridView);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, getProprietariosGrid());
+               R.layout.grid_item, getProprietariosGrid());
         gridview.setAdapter(adapter);
+        gridview.setVerticalSpacing(1);
+        gridview.setHorizontalSpacing(1);
 
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -78,15 +80,17 @@ public class ProprietariosList extends AppCompatActivity {
     }
 
 
-
-
     public String[] getProprietariosGrid() {
         try {
             ControleProprietario ca = new ControleProprietario();
             ArrayList<Proprietario> proprietarios = ca.obterTodosProprietarios();
             String[] retorno = new String[proprietarios.size()];
             for (int i = 0; i < proprietarios.size(); i++) {
-                retorno[i] = "ID: " + proprietarios.get(i).getId() + " \nNome: " + proprietarios.get(i).getNome() + " \nCpf: " + proprietarios.get(i).getIdentificacao();
+                retorno[i] = "ID: " + proprietarios.get(i).getId() + "  " +
+                        "\nNome: " + proprietarios.get(i).getNome() +
+                        "\nCpf: " + proprietarios.get(i).getIdentificacao() +
+                        "\nCidade:"+proprietarios.get(i).getCidade().getNome() +
+                        "\n";
             }
             return retorno;
         } catch (Exception exception) {
@@ -100,7 +104,7 @@ public class ProprietariosList extends AppCompatActivity {
     public static int obterIdGrid(String dados) { //recebe os dados contidos na grid e retorna o id
         String ret = "";
         for (int i = 4; i < dados.length(); i++) {
-            if (dados.charAt(i) != 'N' ) { // PRIMEIRO CAMPO DEPOIS DO ID
+            if (dados.charAt(i) != 'N') { // PRIMEIRO CAMPO DEPOIS DO ID
                 if (dados.charAt(i) == '0' || dados.charAt(i) == '1' || dados.charAt(i) == '2' || dados.charAt(i) == '3' || dados.charAt(i) == '4' || dados.charAt(i) == '5' || dados.charAt(i) == '6' || dados.charAt(i) == '7' || dados.charAt(i) == '8' || dados.charAt(i) == '9') {
                     ret += dados.charAt(i);
 

@@ -70,7 +70,6 @@
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:id="@+id/idade"
-            android:hint="Idade"
             android:textSize="16dp"
             android:textColorHint="#413F24"
             android:textColorLink="#413F24"
@@ -87,7 +86,6 @@
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:id="@+id/latitude"
-            android:hint="Latitude"
             android:textSize="16dp"
             android:textColorHint="#413F24"
             android:textColorLink="#413F24"
@@ -103,7 +101,6 @@
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:id="@+id/logetude"
-            android:hint="Longetude"
             android:textSize="16dp"
             android:textColorHint="#413F24"
             android:textColorLink="#413F24"
@@ -119,7 +116,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/geocode"
-            android:hint="Geocode"
             android:textSize="16dp"
             android:textColorHint="#413F24"
             android:textColorLink="#413F24"
@@ -164,8 +160,6 @@
             android:textColorHint="#413F24"
             android:textColorLink="#413F24"
             android:textSize="16dp"
-            android:hint="Espécie"
-            android:text="1"
             android:layout_below="@+id/textView5"
             android:layout_toRightOf="@+id/textView11"
             android:layout_marginTop="30dp"
@@ -181,12 +175,11 @@
             android:textColorHint="#413F24"
             android:textColorLink="#413F24"
             android:textSize="16dp"
-            android:hint="Proprietário"
-            android:text="1"
             android:layout_below="@+id/especie_idespecie"
             android:layout_toRightOf="@+id/textView11"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:editable="true" />
 
         <Button
             android:layout_width="170dp"
@@ -309,8 +302,8 @@
             android:layout_alignParentStart="true" />
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="170dp"
+            android:layout_height="40dp"
             android:text="Ver no mapa"
             android:id="@+id/bt_ver_mapa"
             android:textColor="#ffffff"
@@ -319,7 +312,8 @@
             android:layout_alignRight="@+id/status"
             android:layout_alignEnd="@+id/status"
             android:layout_toRightOf="@+id/textView4"
-            android:layout_toEndOf="@+id/textView4" />
+            android:layout_toEndOf="@+id/textView4"
+            android:layout_alignBottom="@+id/btn_salvar" />
 
     </RelativeLayout>
 </RelativeLayout>
